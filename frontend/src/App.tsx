@@ -69,6 +69,9 @@ function App() {
   const [availFilter, setAvailFilter] = useState<'all' | 'available'>('all')
   const [suggFilter, setSuggFilter] = useState<'all' | 'available'>('all')
 
+  const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
+// then: fetch(`${API_BASE}/api/domains/check-availability`, { ... })
+
   async function handleCheckAvailability() {
     const domainNames = parseDomainList(domainsInput)
     if (domainNames.length === 0) {
@@ -80,7 +83,7 @@ function App() {
     setAvailabilityError(null)
     setAvailabilityRows(null)
     try {
-      const res = await fetch('/api/domains/check-availability', {
+      const res = await fetch(`${API_BASE}/api/domains/check-availability`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ domainNames }),
@@ -110,7 +113,7 @@ function App() {
     setSuggestions(null)
     const tlds = parseTlds(tldsInput)
     try {
-      const res = await fetch('${import.meta.env.VITE_API_BASE_URL}/api/suggestions', {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/suggestions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
